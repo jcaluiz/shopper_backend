@@ -1,6 +1,7 @@
 import express from "express";
 import { Server } from "http";
 import cors from "cors";
+import MeasureRouter from "./Routers/MeasureRouter";
 
 export default class App {
   public app: express.Express;
@@ -10,6 +11,7 @@ export default class App {
     this.app = express();
     this.server = null;
     this.config();
+    this.routes();
 
     this.app.get("/", (_req, res) => res.json({ ok: true }));
   }
@@ -22,6 +24,10 @@ export default class App {
     this.app.use(cors(corsOptions));
 
     this.app.use(express.json());
+  }
+
+  private routes(): void {
+    this.app.use("/", MeasureRouter);
   }
 
   public start(PORT: string | number): void {
