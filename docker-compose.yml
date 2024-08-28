@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: shopper_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - shopper_backend_net
+
+  shopper_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shopper_backend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres
+    networks:
+      - shopper_backend_net
+
+networks:
+  shopper_backend_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
